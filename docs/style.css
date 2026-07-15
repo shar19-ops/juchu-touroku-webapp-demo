@@ -1,0 +1,132 @@
+:root {
+  --border: #ccc;
+  --accent: #2f6fed;
+  --danger: #b3261e;
+  --required-bg: #fbe2d5;
+}
+* { box-sizing: border-box; }
+body { font-family: "Yu Gothic", "Meiryo", sans-serif; margin: 0; color: #1a1a1a; background: #f4f5f7; }
+.topbar { display: flex; align-items: center; gap: 12px; padding: 10px 16px; background: #fff; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+.topbar h1 { font-size: 16px; margin: 0 16px 0 0; }
+.app-version { font-size: 11px; font-weight: normal; color: #888; margin-left: 6px; }
+.topbar-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-left: auto; }
+.boot-error { color: var(--danger); font-weight: bold; width: 100%; margin: 8px 0 0; }
+.btn { padding: 6px 14px; border: 1px solid var(--border); background: #fff; border-radius: 4px; cursor: pointer; }
+.btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.btn.danger { color: var(--danger); border-color: var(--danger); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+main { max-width: 1000px; margin: 0 auto; padding: 16px; }
+.panel { background: #fff; border: 1px solid var(--border); border-radius: 6px; padding: 16px; margin-bottom: 16px; }
+.status { padding: 8px 12px; }
+.status.error { color: var(--danger); font-weight: bold; background: #fff5f5; border: 1px solid var(--danger); border-radius: 4px; }
+.lock-banner { display: flex; align-items: center; gap: 12px; padding: 10px 14px; margin-bottom: 16px; background: #fff8e1; border: 1px solid #e0b400; border-radius: 6px; }
+.lock-banner-text { flex: 1; font-weight: bold; }
+.demo-banner { margin: 0; padding: 8px 16px; background: #e8f0fe; border-bottom: 1px solid var(--accent); color: #1a3d8f; font-weight: bold; text-align: center; }
+.hint.demo-hint { color: #b3261e; }
+.form-locked .field input:disabled, .form-locked .field select:disabled, .form-locked .field textarea:disabled { background: #f0f0f0; }
+.field-row { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 10px; }
+.field-row.grid-2col { display: grid; grid-template-columns: 1fr 1fr; }
+.field { display: flex; flex-direction: column; gap: 4px; min-width: 220px; }
+.field.field-narrow { flex: 0 0 160px; min-width: 140px; }
+.field.field-wide { flex: 1 1 320px; }
+.field.field-third { flex: 0 0 calc(33.333% - 8px); min-width: 0; }
+.field.required label { background: var(--required-bg); padding: 2px 6px; border-radius: 3px; }
+.field input, .field select, .field textarea { padding: 6px 8px; border: 1px solid var(--border); border-radius: 4px; font-size: 14px; }
+.field input:disabled { background: #eee; color: #888; }
+.input-with-suffix { display: flex; align-items: center; gap: 4px; }
+.input-with-suffix input { flex: 1 1 auto; min-width: 0; }
+.field input[data-yen="1"],
+.field input[data-field="araritsuKettei"],
+.field input[data-field="araritsuSuitei"],
+.field input[data-field="shouhizeiRitsu"],
+.field input[data-field="dekidakaShimeBi"],
+.field input[data-field="seikyuShimeBi"],
+.field input[data-field="shiharaiBi"],
+.field input[data-field="maetokinWariai"],
+.field input[data-field="chukanBaraiKaisuu"],
+.field input[data-field="shunkougoWariai"],
+.field input[data-field="genkinWariai"],
+.field input[data-field="tegataWariai"] { text-align: right; }
+.field select[data-field="saitoNissuu"] { text-align: right; text-align-last: right; }
+.field .hint { font-size: 11px; color: #666; white-space: pre-line; }
+.field .field-error { font-size: 11px; color: var(--danger); }
+.field.invalid input, .field.invalid select { border-color: var(--danger); background: #fff5f5; }
+.print-only { display: none; }
+@media print {
+  /* 画面用の内容は display:none で完全にレイアウトから除去する
+     （visibility:hidden だけだと非表示要素がレイアウト高さを保持し続け、
+     #mainView の高さぶん余分な空白ページが印刷されてしまう） */
+  .no-print, #mainView { display: none !important; }
+  #printSheet { display: block; }
+  body { background: #fff; }
+  @page { size: A4 portrait; margin: 9mm 10mm 9mm 18mm; }
+}
+
+.search-field { position: relative; }
+.search-field input.search-input { width: 100%; }
+.search-results { position: absolute; z-index: 20; background: #fff; border: 1px solid var(--border); max-height: 200px; overflow-y: auto; width: 100%; box-shadow: 0 2px 8px rgba(0,0,0,.15); }
+.search-results div { padding: 6px 8px; cursor: pointer; }
+.search-results div:hover { background: #eef3ff; }
+.search-results .badge-local { color: #a6620c; font-size: 11px; margin-left: 6px; }
+.search-add-local { font-size: 12px; color: var(--accent); cursor: pointer; margin-top: 2px; }
+.komouji-table { border-collapse: collapse; width: 100%; }
+.komouji-table th, .komouji-table td { border: 1px solid var(--border); padding: 4px 8px; text-align: right; }
+.komouji-table th:first-child, .komouji-table td:first-child { text-align: left; }
+.komouji-table td input { width: 11ch; text-align: right; }
+.komouji-table td.komouji-kei { min-width: 11ch; }
+.komouji-error { color: var(--danger); font-size: 12px; margin-top: 4px; }
+.attachment-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #eee; }
+.attachment-row .attachment-label { min-width: 180px; }
+.attachment-row .attachment-label.required { background: var(--required-bg); padding: 2px 6px; border-radius: 3px; }
+.attachment-row .attachment-file-info { font-size: 12px; color: #444; flex: 1; }
+.attachment-row .attachment-missing { color: var(--danger); font-size: 12px; }
+
+#stampInputGrid { display: flex; gap: 16px; flex-wrap: wrap; }
+.stamp-input-row { display: flex; flex-direction: column; gap: 6px; padding: 8px; border: 1px solid var(--border); border-radius: 4px; flex: 1 1 200px; }
+.stamp-input-row.state-locked, .stamp-input-row.state-skipped { opacity: 0.45; }
+.stamp-input-row.state-done { opacity: 0.75; }
+.stamp-state-badge { font-size: 11px; margin-left: 6px; }
+.stamp-state-badge.done { color: #2f6fed; }
+.stamp-state-badge.locked { color: #999; }
+.stamp-state-badge.skipped { color: #999; }
+.stamp-flow-done { color: #2f6fed; font-weight: bold; }
+.stamp-beta-note { color: var(--danger); font-size: 12px; }
+.stamp-cell { width: 2cm; height: 2cm; border: 1px solid #000; display: flex; align-items: center; justify-content: center; }
+.stamp-img { width: 17.57mm; }
+
+@media print {
+  .print-title { text-align: center; font-size: 13pt; font-weight: bold; margin-bottom: 3pt; }
+
+  /* 入力画面の「ラベル上・値下」のカード表示を印刷に引用したレイアウト。
+     大項目（基本情報／金額／関係者など）の見出しは出さず、フィールド単位のカードのみ並べる。 */
+  .print-row { display: flex; gap: 3pt; margin-bottom: 1.5pt; break-inside: avoid; }
+  .print-field { flex: 1 1 0; min-width: 0; border: 0.5pt solid #999; border-radius: 2pt; padding: 1pt 3pt 1pt; line-height: 1.1; min-height: 19pt; }
+  .print-field-third { flex: 0 0 calc(33.333% - 2pt); }
+  .print-field-wide { flex: 1 1 100%; }
+  .print-field-narrow { flex: 0 0 16%; }
+  .print-field.required .print-field-label { background: var(--required-bg); }
+  .print-field-label { font-size: 6.5pt; color: #555; }
+  .print-field-value { font-size: 9.5pt; line-height: 1.15; margin-top: 0.5pt; overflow-wrap: break-word; }
+  .print-field-value.align-right { text-align: right; }
+
+  /* 38.小工事実行予算はカード枠線と同じグレーで統一する */
+  .print-komouji-table { width: 100%; border-collapse: collapse; font-size: 7.5pt; margin: 2pt 0 1pt; break-inside: avoid; }
+  .print-komouji-table td { border: 0.4pt solid #999; padding: 2.5pt 3pt; text-align: right; }
+  .print-komouji-table td:first-child { text-align: left; }
+  .print-komouji-table caption { text-align: left; font-size: 7.5pt; font-weight: bold; caption-side: top; }
+
+  .print-attachment-checklist { font-size: 7.5pt; margin-top: 2pt; margin-bottom: 0; }
+
+  /* 検印欄は元Excelのマス目レイアウトを再現する：発行者・確認1・確認2の3マスは罫線を結合し、
+     名称ラベルは各マスの上に表示、マスは2cm角。登録済検印は別マスのまま独立させる。 */
+  .print-stamp-section { margin-top: 4pt; display: flex; justify-content: flex-end; align-items: flex-end; gap: 4pt; break-inside: avoid; }
+  #printSheet .stamp-boxes { display: flex; gap: 4pt; }
+  .stamp-merged-table, .stamp-standalone-table { border-collapse: collapse; table-layout: fixed; }
+  .stamp-name-label { font-size: 7pt; text-align: center; padding: 1pt 2pt; border: 0.6pt solid #000; width: 2cm; }
+  #printSheet .stamp-boxes td.stamp-cell { display: table-cell; width: 2cm; height: 2cm; padding: 0; border: 0.6pt solid #000; text-align: center; vertical-align: middle; }
+
+  /* 元Excelのフッター画像（ページ左下に表示される会社ロゴ）を再現する。
+     position:fixedはChromiumのPDF出力で描画されないケースがあるため、
+     通常のフロー内でページ末尾・左寄せに配置する。 */
+  .print-footer-logo { display: block; margin-top: 6pt; width: 30pt; height: 14.25pt; object-fit: contain; }
+}

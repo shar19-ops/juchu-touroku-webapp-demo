@@ -1,0 +1,13 @@
+{
+  "name": "juchu-touroku-webapp",
+  "version": "1.1.0",
+  "description": "受注報告登録メモ Webアプリ（受注報告登録・添付書類・検印・印刷）",
+  "private": true,
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

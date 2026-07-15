@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>受注報告登録メモ</title>
+<link rel="manifest" href="manifest.json?v=20260716a">
+<link rel="stylesheet" href="style.css?v=20260716a">
+<link rel="preload" as="image" href="images/footer-logo.jpg">
+</head>
+<body>
+<header class="topbar no-print">
+  <h1>受注報告登録メモ<span id="appVersion" class="app-version"></span></h1>
+  <div class="topbar-actions">
+    <select id="projectSelect"></select>
+    <button type="button" id="deleteRecordBtn" class="btn danger">削除</button>
+    <button type="button" id="newRecordBtn" class="btn">新規案件</button>
+    <button type="button" id="openFileBtn" class="btn">ファイルを開く</button>
+    <input type="file" id="openFileInput" accept="application/json" hidden>
+    <button type="button" id="exportFileBtn" class="btn">ファイルに保存</button>
+    <button type="button" id="printBtn" class="btn">印刷/PDF</button>
+  </div>
+  <p id="bootError" class="boot-error" hidden></p>
+</header>
+<p id="demoBanner" class="demo-banner no-print" hidden></p>
+
+<main id="mainView" hidden>
+  <p id="lockBanner" class="lock-banner no-print" hidden></p>
+  <div id="formRoot"></div>
+  <div id="attachmentsRoot" class="panel"></div>
+  <div id="stampPanel" class="panel">
+    <h2>検印</h2>
+    <div id="stampInputGrid"></div>
+    <div id="stampFlowActions"></div>
+    <p class="stamp-beta-note">※登録済検印は紙ベースで別途押印してください。</p>
+  </div>
+  <p id="saveStatus" class="status"></p>
+</main>
+
+<div id="printSheet" class="print-only"></div>
+
+<script src="demo-config.js?v=20260716a"></script>
+<script src="date-stamp.js?v=20260716a"></script>
+<script src="calculations.js?v=20260716a"></script>
+<script src="customer-master.js?v=20260716a"></script>
+<script src="attachments.js?v=20260716a"></script>
+<script src="stamp-flow.js?v=20260716a"></script>
+<script src="lock.js?v=20260716a"></script>
+<script src="storage.js?v=20260716a"></script>
+<script src="form-fields.js?v=20260716a"></script>
+<script src="form-render.js?v=20260716a"></script>
+<script src="print.js?v=20260716a"></script>
+<script src="app.js?v=20260716a"></script>
+</body>
+</html>
