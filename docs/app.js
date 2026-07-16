@@ -166,15 +166,11 @@ $('#exportFileBtn').addEventListener('click', async () => {
 $('#printBtn').addEventListener('click', async () => {
   if (!currentRecord) return;
   buildPrintSheet(currentRecord);
-  // フッターロゴ画像の読み込みが非同期のため、完了前にwindow.print()すると
-  // 画像が空欄のまま印刷されてしまう。読み込み完了を待ってから印刷する。
-  const logoImg = $('.print-footer-logo');
-  if (logoImg && !logoImg.complete) {
-    await new Promise((resolve) => {
-      logoImg.addEventListener('load', resolve, { once: true });
-      logoImg.addEventListener('error', resolve, { once: true });
-    });
-  }
+  // フッターロゴ・検印（stamp-img）は読み込み/デコードが非同期のため、
+  // 完了前にwindow.print()すると該当画像だけ空欄のまま印刷されてしまう。
+  // print()シート内の全<img>のデコード完了を待ってから印刷する。
+  const images = $$('#printSheet img');
+  await Promise.all(images.map((img) => (img.decode ? img.decode().catch(() => {}) : Promise.resolve())));
   window.print();
 });
 
