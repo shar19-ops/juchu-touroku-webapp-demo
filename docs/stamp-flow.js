@@ -29,6 +29,18 @@ function stampSlotState(record, i) {
   return 'locked';
 }
 
+// 「確認者へ提出」「確認2へ提出」のタイミングで、Outlook等の既定メールソフトの新規作成画面を
+// 定型件名・本文つきで開く。mailto: の仕様上、添付ファイルの指定はできないため、
+// エクスポート済みのファイルは手動で添付してもらう。
+function openStampMailDraft(submitterName) {
+  const subject = '受注報告登録メモ送信';
+  const body = `掲題の件、回送よろしくお願いします。　${submitterName}`;
+  const url = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  const a = document.createElement('a');
+  a.href = url;
+  a.click();
+}
+
 function prevRealStage(record, stage) {
   const flow = record.stampFlow;
   for (let i = stage - 1; i >= 0; i--) {
@@ -73,8 +85,14 @@ async function advanceStampFlow(record, action) {
       exportedFlow.stage = STAMP_SLOT_COUNT;
     }
     saveRecord(record);
-    await exportRecordToFile(exported, submitterName);
-    $('#saveStatus').textContent = '保存しました。Teams/メールで次の方へ送付してください。このアプリを閉じます（' + new Date().toLocaleTimeString('ja-JP') + '）';
+    const filename = await exportRecordToFile(exported, submitterName);
+    if (filename && (action === 'submit' || action === 'toConfirm2')) {
+      openStampMailDraft(submitterName);
+      alert(`保存しました。\n\n📎 添付ファイルを忘れずに\n「${filename}」を、開いたOutlookの新規メールに添付してから送信してください。`);
+      $('#saveStatus').textContent = `保存しました（${filename}）。Outlookの新規メールにこのファイルを添付して送付してください。このアプリを閉じます（` + new Date().toLocaleTimeString('ja-JP') + '）';
+    } else {
+      $('#saveStatus').textContent = '保存しました。Teams/メールで次の方へ送付してください。このアプリを閉じます（' + new Date().toLocaleTimeString('ja-JP') + '）';
+    }
     $('#saveStatus').classList.remove('error');
     closeAppWindow();
     return;

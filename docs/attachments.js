@@ -26,9 +26,26 @@ function missingRequiredAttachments(record) {
     .map((def) => def.label);
 }
 
+// data: URLはブラウザによってはwindow.open()での直接遷移がブロックされ、
+// タブは開くが中身が表示されない（手動リロードで表示される）ことがある。
+// blob: URLに変換してから開くとこの問題を回避できる。
+function dataUrlToBlob(dataUrl) {
+  const [header, base64] = dataUrl.split(',');
+  const mime = (header.match(/data:([^;]+)/) || [])[1] || 'application/octet-stream';
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return new Blob([bytes], { type: mime });
+}
+
 function openAttachmentPreview(attachment) {
-  const win = window.open(attachment.dataUrl, '_blank');
-  if (win) return;
+  const blobUrl = URL.createObjectURL(dataUrlToBlob(attachment.dataUrl));
+  const win = window.open(blobUrl, '_blank');
+  if (win) {
+    setTimeout(() => URL.revokeObjectURL(blobUrl), 60000);
+    return;
+  }
+  URL.revokeObjectURL(blobUrl);
   // ポップアップがブロックされた場合はダウンロードにフォールバック
   const a = document.createElement('a');
   a.href = attachment.dataUrl;

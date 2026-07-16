@@ -326,22 +326,25 @@ function updateYosanHenkouAvailability(record) {
   }
 }
 
-// 10.契約金額: 5,000,000円以下の間は入力可。5,000,000円を超えたら、それ以上の編集を受け付けない
-// （値そのものはクリアせず保持したまま、入力欄をロックする）。
-function updateKeiyakuKingakuAvailability(record) {
-  const input = $('#formRoot [data-field="keiyakuKingaku"]');
-  if (!input) return;
-  const locked = Number(record.fields.keiyakuKingaku) > 5000000;
-  input.disabled = locked;
-}
-
 // 38.小工事実行予算: 10.契約金額が5,000,000円を超える場合は入力を受け付けない
 // （実行予算書/工事経費計算書の添付が必須になる規模のため、この簡易表は対象外とする）。
+// 10.契約金額の編集で500万円超に変わった場合は、38に入力済みの内容を破棄する。
 function updateKomoujiYosanAvailability(record) {
   const locked = Number(record.fields.keiyakuKingaku) > 5000000;
+  if (locked && record.fields.komoujiYosan) {
+    delete record.fields.komoujiYosan;
+    $$('#formRoot [data-table-field="komoujiYosan"]').forEach((input) => { input.value = ''; });
+    $$('#formRoot [data-kei-row]').forEach((el) => { el.textContent = yen(0); });
+    $$('#formRoot [data-komouji-error]').forEach((el) => { el.hidden = true; });
+  }
   $$('#formRoot [data-table-field="komoujiYosan"]').forEach((input) => {
     input.disabled = locked;
   });
+  const wrapper = $('#formRoot [data-field-id="komoujiYosan"]');
+  if (wrapper) {
+    wrapper.classList.toggle('required', !locked);
+    if (locked) wrapper.classList.remove('invalid');
+  }
 }
 
 // 34.支払条件区分に応じて、通常時専用欄(出来高締/請求締/支払日)と
@@ -375,7 +378,6 @@ function runAutoCalculations(record) {
   const f = record.fields;
 
   updateKoujiBangouAvailability(record);
-  updateKeiyakuKingakuAvailability(record);
   updateYosanHenkouAvailability(record);
   updateShiharaiJoukenAvailability(record);
 

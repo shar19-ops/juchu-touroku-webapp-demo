@@ -33,13 +33,13 @@ const FIELD_GROUPS = [
         hint: '例: 26-0000' },
       { id: 'sekouJigyosho', no: null, label: '施工事業所コード', type: 'select', required: true,
         options: [
-          { value: '010', label: '本店' },
-          { value: '020', label: '東関東支店' },
-          { value: '030', label: '横浜支店' },
-          { value: '040', label: '大阪支店' },
-          { value: '050', label: '名古屋支店' },
-          { value: '060', label: '仙台支店' },
-          { value: '090', label: '北関東支店' },
+          { value: '010', label: '(010)　本店' },
+          { value: '020', label: '(020)　東関東支店' },
+          { value: '030', label: '(030)　横浜支店' },
+          { value: '040', label: '(040)　大阪支店' },
+          { value: '050', label: '(050)　名古屋支店' },
+          { value: '060', label: '(060)　仙台支店' },
+          { value: '090', label: '(090)　北関東支店' },
         ] },
       { id: 'mitsumoriBangou', no: null, label: '見積番号', type: 'text', required: false,
         pattern: '^\\d{3}-\\d{2}-\\d{5}-\\d{2}$',
@@ -245,7 +245,8 @@ const FIELD_GROUPS = [
   {
     groupLabel: '38. 小工事実行予算',
     fields: [
-      { id: 'komoujiYosan', no: '38', label: '小工事実行予算', type: 'table', required: true, width: 'wide',
+      { id: 'komoujiYosan', no: '38', label: '小工事実行予算', type: 'table', required: false,
+        requiredIf: (f) => Number(f.keiyakuKingaku) <= 5000000, width: 'wide',
         columns: [
           { key: 'zairyouhi', label: '材料費（F50）' },
           { key: 'gaichuuhi', label: '外注費（Z50）' },
